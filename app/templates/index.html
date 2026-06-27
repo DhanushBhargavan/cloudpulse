@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudPulse — Infrastructure Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">⚡ CloudPulse</div>
+            <div class="tagline">AWS Infrastructure Monitoring Dashboard</div>
+        </div>
+        <div class="header-right">
+            <div class="status-badge" id="connectionStatus">● Connecting...</div>
+            <div class="timestamp" id="lastUpdated">--</div>
+        </div>
+    </header>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner" id="alertBanner" style="display:none;">
+        <div class="alert-banner-content">
+            <span class="alert-icon">⚠️</span>
+            <span id="alertMessage"></span>
+            <button class="diagnose-btn" onclick="getDiagnosis()">🤖 AI Diagnose</button>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <main class="dashboard">
+
+        <!-- CPU Card -->
+        <div class="card" id="cpuCard">
+            <div class="card-header">
+                <span class="card-icon">🖥️</span>
+                <span class="card-title">CPU Usage</span>
+                <span class="card-badge" id="cpuStatus">--</span>
+            </div>
+            <div class="metric-value" id="cpuPercent">--%</div>
+            <div class="metric-sub" id="cpuCores">-- cores</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="cpuBar"></div>
+            </div>
+        </div>
+
+        <!-- Memory Card -->
+        <div class="card" id="memoryCard">
+            <div class="card-header">
+                <span class="card-icon">💾</span>
+                <span class="card-title">Memory Usage</span>
+                <span class="card-badge" id="memoryStatus">--</span>
+            </div>
+            <div class="metric-value" id="memoryPercent">--%</div>
+            <div class="metric-sub" id="memoryDetail">-- GB / -- GB</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="memoryBar"></div>
+            </div>
+        </div>
+
+        <!-- Disk Card -->
+        <div class="card" id="diskCard">
+            <div class="card-header">
+                <span class="card-icon">💿</span>
+                <span class="card-title">Disk Usage</span>
+                <span class="card-badge" id="diskStatus">--</span>
+            </div>
+            <div class="metric-value" id="diskPercent">--%</div>
+            <div class="metric-sub" id="diskDetail">-- GB / -- GB</div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="diskBar"></div>
+            </div>
+        </div>
+
+        <!-- Network Card -->
+        <div class="card" id="networkCard">
+            <div class="card-header">
+                <span class="card-icon">🌐</span>
+                <span class="card-title">Network I/O</span>
+                <span class="card-badge healthy">Live</span>
+            </div>
+            <div class="network-grid">
+                <div class="network-item">
+                    <div class="network-label">↑ Sent</div>
+                    <div class="network-value" id="netSent">-- MB</div>
+                </div>
+                <div class="network-item">
+                    <div class="network-label">↓ Received</div>
+                    <div class="network-value" id="netRecv">-- MB</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI Diagnosis Card -->
+        <div class="card card-wide" id="aiCard">
+            <div class="card-header">
+                <span class="card-icon">🤖</span>
+                <span class="card-title">AI Anomaly Diagnosis</span>
+                <span class="card-badge" id="aiStatus">Standby</span>
+            </div>
+            <div class="ai-content" id="aiContent">
+                <div class="ai-idle">
+                    All systems healthy. AI diagnosis will activate automatically when anomalies are detected, or click the button below to run a manual check.
+                </div>
+            </div>
+            <button class="diagnose-btn-main" onclick="getDiagnosis()">
+                🤖 Run AI Diagnosis
+            </button>
+        </div>
+
+        <!-- System Overview Card -->
+        <div class="card card-wide" id="overviewCard">
+            <div class="card-header">
+                <span class="card-icon">📊</span>
+                <span class="card-title">System Overview</span>
+                <span class="card-badge healthy" id="overallHealth">Healthy</span>
+            </div>
+            <div class="overview-grid" id="overviewGrid">
+                <div class="overview-item">
+                    <div class="overview-label">Environment</div>
+                    <div class="overview-value">AWS EC2 / Local Dev</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">Monitoring</div>
+                    <div class="overview-value">Prometheus + Grafana</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">Deployed Via</div>
+                    <div class="overview-value">Terraform + GitHub Actions</div>
+                </div>
+                <div class="overview-item">
+                    <div class="overview-label">Active Alerts</div>
+                    <div class="overview-value" id="alertCount">0</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
