@@ -1,0 +1,12 @@
+venv/
+.git/
+.gitignore
+.env
+__pycache__/
+*.pyc
+.vscode/
+cloudpulse_session_history.txt
+README.md
+*.tfstate
+*.tfstate.backup
+.terraform/
